@@ -1,5 +1,6 @@
 $(document).ready(function(){
-    $('.tile').click(function(){
+ //   $('.tile').click(function(){
+    $(document).on('click', '.tile', function(){
         var url = $(this).attr('file');
         var desc = $(this).attr('desc');
         var img = this.querySelector('img').src;

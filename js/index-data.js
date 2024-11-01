@@ -52,8 +52,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     bgItemTitle.appendChild(tagsDiv);
 
                     item.tags.forEach(tag => {
-                        const badge = document.createElement("div");
-                        badge.className = "badge badge-primary";
+                        const badge = document.createElement("span");
+                        badge.className = "badge badge-primary  m-1";
                         badge.textContent = tag;
                         tagsDiv.appendChild(badge);
                     });
