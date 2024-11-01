@@ -1,7 +1,7 @@
 <?php
 
 define('TEMPLATES_DATA', "../templates/");
-$file = "data.json";
+$file = "../data.json";
 
 
 if(file_exists($file)){
