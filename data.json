@@ -3,8 +3,8 @@
         {
             "name": "Anglais",
             "lang": "en",
-            "description": "",
-            "img": ".image229.png",
+            "description": "Teco",
+            "img": ".\/img\/lumi.jpg",
             "type": "generic",
             "tags": [
                 "Gabarit"
