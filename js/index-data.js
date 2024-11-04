@@ -25,6 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
                         tileCard.setAttribute("file", `./templates/${item.filePath}`);
                         tileCard.setAttribute("title", item.name);
                         tileCard.setAttribute("desc", item.desc || "");
+                        tileCard.setAttribute("import", "Import");
+                        tileCard.setAttribute("href", "#");
                         documentList.appendChild(tileCard);
 
                         // Imagen de la tarjeta
