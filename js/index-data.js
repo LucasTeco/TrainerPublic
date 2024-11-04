@@ -5,61 +5,64 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch(dataFilePath)
         .then(response => response.json())
         .then(data => {
-            // Combina plantillas genéricas y específicas en una sola lista
-            const templates = [...data.generic, ...data.specific];
-            
-            templates.forEach(collection => {
-                collection.items.forEach(item => {
-                    // Crear el contenedor principal
-                    const colTpl = document.createElement("div");
-                    colTpl.className = "col-tpl";
+            // Itera sobre todas las propiedades (colecciones) en el JSON
+            Object.keys(data).forEach(collectionType => {
+                const collections = data[collectionType];
 
-                    const documentList = document.createElement("div");
-                    documentList.className = "document-list";
-                    colTpl.appendChild(documentList);
+                // Itera sobre cada colección dentro del tipo actual
+                collections.forEach(collection => {
+                    collection.items.forEach(item => {
+                        // Crear el contenedor principal de cada tarjeta
+                        const colTpl = document.createElement("div");
+                        colTpl.className = "col-tpl";
 
-                    const tileCard = document.createElement("div");
-                    tileCard.className = "tile card h-100";
-                    tileCard.setAttribute("file", `./templates/${item.filePath}`);
-                    tileCard.setAttribute("title", item.name);
-                    tileCard.setAttribute("desc", item.desc || "");
-                    documentList.appendChild(tileCard);
+                        const documentList = document.createElement("div");
+                        documentList.className = "document-list";
+                        colTpl.appendChild(documentList);
 
-                    // Imagen de la tarjeta
-                    const img = document.createElement("img");
-                    img.className = "card-img-top";
-                    img.src = item.img || "../img/placeholder.png"; // Ruta alternativa en caso de falta de img
-                    tileCard.appendChild(img);
+                        const tileCard = document.createElement("div");
+                        tileCard.className = "tile card h-100";
+                        tileCard.setAttribute("file", `./templates/${item.filePath}`);
+                        tileCard.setAttribute("title", item.name);
+                        tileCard.setAttribute("desc", item.desc || "");
+                        documentList.appendChild(tileCard);
 
-                    // Cuerpo de la tarjeta (puede mantenerse vacío según tu estructura)
-                    const cardBody = document.createElement("div");
-                    cardBody.className = "card-body p-0";
-                    tileCard.appendChild(cardBody);
+                        // Imagen de la tarjeta
+                        const img = document.createElement("img");
+                        img.className = "card-img-top";
+                        img.src = item.img || "../img/placeholder.png"; // Ruta alternativa
+                        tileCard.appendChild(img);
 
-                    // Footer de la tarjeta con título y etiquetas
-                    const bgItemTitle = document.createElement("div");
-                    bgItemTitle.className = "bg-item-title card-footer";
-                    tileCard.appendChild(bgItemTitle);
+                        // Cuerpo de la tarjeta (vacío en este caso)
+                        const cardBody = document.createElement("div");
+                        cardBody.className = "card-body p-0";
+                        tileCard.appendChild(cardBody);
 
-                    const titleDiv = document.createElement("div");
-                    titleDiv.className = "title";
-                    titleDiv.textContent = item.name;
-                    bgItemTitle.appendChild(titleDiv);
+                        // Footer de la tarjeta con título y etiquetas
+                        const bgItemTitle = document.createElement("div");
+                        bgItemTitle.className = "bg-item-title card-footer";
+                        tileCard.appendChild(bgItemTitle);
 
-                    // Etiquetas
-                    const tagsDiv = document.createElement("div");
-                    tagsDiv.className = "tags";
-                    bgItemTitle.appendChild(tagsDiv);
+                        const titleDiv = document.createElement("div");
+                        titleDiv.className = "title";
+                        titleDiv.textContent = item.name;
+                        bgItemTitle.appendChild(titleDiv);
 
-                    item.tags.forEach(tag => {
-                        const badge = document.createElement("span");
-                        badge.className = "badge badge-primary  m-1";
-                        badge.textContent = tag;
-                        tagsDiv.appendChild(badge);
+                        // Etiquetas
+                        const tagsDiv = document.createElement("div");
+                        tagsDiv.className = "tags";
+                        bgItemTitle.appendChild(tagsDiv);
+
+                        item.tags.forEach(tag => {
+                            const badge = document.createElement("span");
+                            badge.className = "badge badge-primary m-1";
+                            badge.textContent = tag;
+                            tagsDiv.appendChild(badge);
+                        });
+
+                        // Agregar la estructura completa al div root
+                        root.appendChild(colTpl);
                     });
-
-                    // Agregar toda la estructura creada al div root
-                    root.appendChild(colTpl);
                 });
             });
         })
