@@ -1,11 +1,12 @@
 $(document).ready(function(){
  //   $('.tile').click(function(){
     $(document).on('click', '.tile', function(){
+        // ../templates/   hay que cambiar la url para que llame a la carpeta templates
         var url = $(this).attr('file');
         var desc = $(this).attr('desc');
         var img = this.querySelector('img').src;
         $('#modal-title').html($(this).attr('title'))
-        $('#modal-body').html("<img class='modal-img' src='"+img+"'><p>"+desc+"<p/><div class=\"btn-group\"><a href='#' class='btn btn-success' onclick=\"importTemplate('"+url+"')\">Import</a></div>");
+        $('#modal-body').html("<img class='modal-img' src='"+img+"'><p>"+desc+"<p/><div class=\"btn-group\"><a href='#' class='btn btn-success' onclick=\"importTemplate('"+url+"')\">Importar</a></div>");
         $('#modal').modal('show');
     })
     $('.close').click(function(){
