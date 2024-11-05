@@ -3,9 +3,8 @@
 define('TEMPLATES_DATA', "../templates/");
 $file = "../data.json";
 
-
-if(file_exists($file)){
-    echo "File '$file' already exist. Deleting it.\n";
+if (file_exists($file)) {
+    echo "File '$file' already exists. Deleting it.\n";
     unlink($file);
 }
 
@@ -16,83 +15,74 @@ file_put_contents($file, json_encode($data));
 
 echo "The execution has finished.\n";
 
-function getTemplates(){
+function getTemplates() {
     $result = new stdClass();
-    $result->generic = array();
-    $result->specific = array();
-  
-    $templatesFolder = TEMPLATES_DATA;
 
+    $templatesFolder = TEMPLATES_DATA;
     $folders = scandir($templatesFolder);
-  
-    foreach($folders as $folderName){
-        if(in_array($folderName, array(".", ".."))){ continue;}
-        if(!is_dir($templatesFolder.$folderName)){ continue;}
-  
-        // read metadata file collection.json
-        $metadataFile = $templatesFolder.$folderName."/collection.json";
-  
-        // file collection.json must exist
+
+    foreach ($folders as $folderName) {
+        if (in_array($folderName, array(".", ".."))) { continue; }
+        if (!is_dir($templatesFolder . $folderName)) { continue; }
+
+        // Asignar el nombre de la carpeta como el tipo (type)
+        $type = $folderName;
+
+        // Leer archivo metadata collection.json
+        $metadataFile = $templatesFolder . $folderName . "/collection.json";
         if (!is_file($metadataFile)) continue;
-  
+
         $content = file_get_contents($metadataFile);
         $collection = json_decode($content);
-  
-        // force type specific if it is not set
-        if (!isset($collection->type)){
-          $collection->type = "specific"; 
-        } 
-  
+
+        // Crear un grupo para el tipo si no existe en $result
+        if (!isset($result->{$type})) {
+            $result->{$type} = array();
+        }
+
         $collection->tags = array();
         $collection->items = array();
-  
-        if($collection->type == 'generic'){
-          $result->generic[] = $collection;
-        }
-        else{
-          $result->specific[] = $collection;
-        }
-  
-        $files = scandir($templatesFolder.$folderName);
-      
-        foreach ($files as $filename){
-            $filePath = $templatesFolder.$folderName."/".$filename;
-  
-            // ignore collection.json
+
+        // Agregar la colección al grupo correspondiente
+        $result->{$type}[] = $collection;
+
+        // Escanear archivos en la carpeta
+        $files = scandir($templatesFolder . $folderName);
+        foreach ($files as $filename) {
+            $filePath = $templatesFolder . $folderName . "/" . $filename;
+
+            // Ignorar collection.json
             if ($filename == "collection.json") continue;
             if (!is_file($filePath)) continue;
-  
+
             $content = file_get_contents($filePath);
             $template = json_decode($content);
-  
-            if (!$template){ continue;}
-  
-            // retrocompatible
-            if (!isset($template->desc)){
-              $template->desc = ""; 
-            } 
-  
-            // retrocompatible
-            if (!isset($template->img) && isset($template->image)){
-              $template->img = $template->image; 
-            } 
-  
-            // retrocompatible
-            if (!isset($template->tags)){
-              $template->tags = array();
+            if (!$template) { continue; }
+
+            // Ajustes retrocompatibles
+            if (!isset($template->desc)) {
+                $template->desc = "";
             }
-  
-            foreach ($template->tags as $tag){
-              if(!in_array($tag, $collection->tags)){
-                $collection->tags[] = $tag;
-              }
+
+            if (!isset($template->img) && isset($template->image)) {
+                $template->img = $template->image;
             }
-  
-            $template->filePath = $folderName."/".urlencode($filename);
-  
+
+            if (!isset($template->tags)) {
+                $template->tags = array();
+            }
+
+            foreach ($template->tags as $tag) {
+                if (!in_array($tag, $collection->tags)) {
+                    $collection->tags[] = $tag;
+                }
+            }
+
+            $template->filePath = $folderName . "/" . urlencode($filename);
+
             $collection->items[] = $template;
         }
     }
-  
+
     return $result;
 }
