@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                         const tileCard = document.createElement("div");
                         tileCard.className = "tile card h-100";
-                        tileCard.setAttribute("file", `./templates/${item.filePath}`);
+                        tileCard.setAttribute("file", `../templates/${item.filePath}`);
                         tileCard.setAttribute("title", item.name);
                         tileCard.setAttribute("desc", item.desc || "");
                         tileCard.setAttribute("import", "Import");
